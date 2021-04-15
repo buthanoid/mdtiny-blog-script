@@ -15,6 +15,14 @@ A very tiny blog script :
 
 ## Basic Info
 
+### Requirements
+
+The Perl Script calls `cmark` and `source-highlight` so you must have them in your path. Normally when you install these two packages they will be known by these names.
+
+The minimal blog structure is the two directories `source/` and `source/data/` and two possibly empty files `source/top.html` and `source/bot.html`.
+
+The Perl script uses Perl libraries `File::Basename`, `HTML::Entities` and `IPC::Open3`.
+
 ### "top.html" and "bot.html"
 
 These are the two .html files automatically included at the beginning and the end of every article. \
