@@ -36,7 +36,7 @@ my @all_md_filepaths = split (/\n/, `ls -1 $DIR_SOURCE/*.md`);
 
 # export each markdown to html export file
 foreach my $md_filepath (@all_md_filepaths) {
-	$md_filepath =~ s/\s//g ;
+	$md_filepath =~ s/\s//go ;
 	checkfile("er",$md_filepath);
 	
 	# convert md to html
@@ -44,16 +44,16 @@ foreach my $md_filepath (@all_md_filepaths) {
 	
 	# highlighting code nodes
 	$html_content =~ 
-	s/<pre><code class="([\w-]*)">([\s\S]*?)<\/code><\/pre>/replace($1,$2)/ge ;
+	s/<pre><code class="([\w-]*)">([\s\S]*?)<\/code><\/pre>/replace($1,$2)/geo ;
 	
 	# preparing top content
-	my ($title) = $html_content =~ m/<h1>(.*?)<\/h1>/ ;
+	my ($title) = $html_content =~ m/<h1>(.*?)<\/h1>/o ;
 	my $top_html = `cat $FILE_TOP_HTML` ;
-	$top_html =~ s/<title><\/title>/"<title>$title<\/title>"/e ;
+	$top_html =~ s/<title><\/title>/"<title>$title<\/title>"/eo ;
 	
 	# computing filepath
 	my $html_basename = basename($md_filepath);
-	$html_basename =~ s/\.md$/\.html/;
+	$html_basename =~ s/\.md$/\.html/o;
 	my $html_filepath = "$DIR_EXPORT/$html_basename" ;
 	
 	# write to filepath
@@ -74,7 +74,7 @@ sub replace {
 	
 	# extract name of language
 	my $name = $language_name ;
-	$name =~ s/language-// ;
+	$name =~ s/language-//o ;
 
 	# decode HTML entities, because cmark already encode them
 	# source-highlight is not going to treat '&amp;' as '&'
@@ -94,25 +94,25 @@ sub replace {
 	close($fdr_cmd);
 	
 	# replacing bad html wrapper with correct html5 one
-	$code =~ s/<tt>/"<code class=\"$language_name\" >"/e ;
-	$code =~ s/<\/tt>/<\/code>/ ;
+	$code =~ s/<tt>/"<code class=\"$language_name\" >"/eo ;
+	$code =~ s/<\/tt>/<\/code>/o ;
 	
 	return $code;
 }
 
 # function to check files
 sub checkfile { my ($checks, $filepath) = @_ ;
-	if ($checks =~ m/d/) { 
+	if ($checks =~ m/d/o) { 
 		(-d $filepath) or die ("Path $filepath is not a directory"); }
-	if ($checks =~ m/e/) { 
+	if ($checks =~ m/e/o) { 
 		(-e $filepath) or die ("Path $filepath does not exist"); }
-	if ($checks =~ m/f/) { 
+	if ($checks =~ m/f/o) { 
 		(-f $filepath) or die ("Path $filepath is not a file"); }
-	if ($checks =~ m/l/) { 
+	if ($checks =~ m/l/o) { 
 		(-l $filepath) or die ("Path $filepath is not a symbolic link"); }
-	if ($checks =~ m/r/) {
+	if ($checks =~ m/r/o) {
 		(-r $filepath) or die("Path $filepath can not be read"); }
-	if ($checks =~ m/w/) {
+	if ($checks =~ m/w/o) {
 		(-w $filepath) or die("Path $filepath can not be written"); }
 }
 
