@@ -52,6 +52,16 @@ The blog script will create `export/` and `export/data` if they do not exist. So
 
 This github repository contains itself a little example. You will find two articles in `source/` with a `css` file in `source/data/css`. The result of `script_export.pl` is in the `export/` directory. 
 
+### Automatic script call when a source file is modified
+
+With the package `inotify-tools`, you run the following command :
+
+```bash
+inotifywait -r -m -e MODIFY source/ | while IFS= read -r line; do ./script_export.pl ; done
+```
+
+It waits and notifies for all `MODIFY` events on all files in `source/` folder recursively, and for each event call the script. Ctrl+C to stop.
+
 ## Todo and ideas
 
 - an automatic summary generated at the beginning of each article
